@@ -5,32 +5,27 @@ use serenity::model::gateway::Ready;
 use serenity::prelude::*;
 use shuttle_secrets::SecretStore;
 // use tracing::{error, info};
-use tracing::info;
 use regex::Regex;
+use tracing::info;
 
 struct Bot;
 
 #[async_trait]
 impl EventHandler for Bot {
     async fn message(&self, ctx: Context, msg: Message) {
-        // if msg.content == "!hello" {
-        //     if let Err(e) = msg.channel_id.say(&ctx.http, "world!").await {
-        //         error!("Error sending message: {:?}", e);
-        //     }
-        // }
         // 発言者がBotの場合はreturn
         if msg.author.bot {
             return;
         }
+
         // メッセージにtwitterのリンクが含まれていた場合にvxtwitterにしてリプライする
-        // let Some((username, hash)) = match_url(&msg.content) else {
-        //     return;
-        // };
-        // let reply = format!("https://vxtwitter.com/{}/status/{}\n", username, hash);
-        // msg.reply(&ctx.http, reply).await.unwrap();
         if let Some((username, hash)) = match_url(&msg.content) {
+            // let is_embeds = &msg.embeds;
+            // println!("is_embeds: {:?}", is_embeds);
             let reply = format!("https://vxtwitter.com/{}/status/{}\n", username, hash);
-            msg.reply(&ctx.http, reply).await.unwrap();
+            msg.reply(&ctx.http, reply)
+                .await
+                .expect("Error sending message");
         }
     }
 
@@ -39,12 +34,15 @@ impl EventHandler for Bot {
     }
 }
 
+// twitterのリンクを含むメッセージを受け取り、ユーザー名とハッシュを取り出す
 fn match_url(content: &str) -> Option<(String, String)> {
+    // 正規表現を使ってユーザー名とハッシュを取り出す
     let regex = Regex::new(
         r"https://(x|twitter).com/(?<username>[a-zA-Z0-9_]{1,16})/status/(?<hash>[0-9]+)",
     )
-    .unwrap();
+    .expect("Failed to create regex");
 
+    // 正規表現にマッチした場合はユーザー名とハッシュを返す
     regex
         .captures(content)
         .map(|caps| (caps["username"].to_string(), caps["hash"].to_string()))

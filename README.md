@@ -15,8 +15,13 @@ To add the bot to a server we need to create an invite link.
 
 For more information please refer to the [Discord docs](https://discord.com/developers/docs/getting-started) as well as the [Serenity repo](https://github.com/serenity-rs/serenity) for more examples.
 
+導入用Url
 https://discord.com/oauth2/authorize?client_id=1213445334752174161&permissions=8&scope=bot
 
 アイドルタイムの設定
 `cargo shuttle project restart --idle-minutes 0`
 `cargo shuttle project status`で確認
+
+ローカル実行  
+`cargo shuttle run`  
+`cargo shuttle deploy`  
