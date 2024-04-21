@@ -26,7 +26,7 @@ impl EventHandler for Bot {
                 .expect("Error sending message");
 
             // メッセージに埋め込みが含まれていた場合に埋め込みの情報を取得する
-            let is_embeds = match msg.embeds[0].title {
+            let is_embeds = match &msg.embeds[0].title {
                 Some(title) => &title,
                 None => "false",
             };
