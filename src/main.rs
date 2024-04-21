@@ -20,10 +20,10 @@ impl EventHandler for Bot {
 
         // メッセージにtwitterのリンクが含まれていた場合にvxtwitterにしてリプライする
         if let Some((username, hash)) = match_url(&msg.content) {
-            let reply = format!("https://vxtwitter.com/{}/status/{}\n", username, hash);
-            msg.reply(&ctx.http, reply)
-                .await
-                .expect("Error sending message");
+            // let reply = format!("https://vxtwitter.com/{}/status/{}\n", username, hash);
+            // msg.reply(&ctx.http, reply)
+            //     .await
+            //     .expect("Error sending message");
 
             // メッセージに埋め込みが含まれていた場合に埋め込みの情報を取得する
             let is_embeds = match &msg.embeds[0].title {
