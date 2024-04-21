@@ -20,8 +20,8 @@ impl EventHandler for Bot {
 
         // メッセージにtwitterのリンクが含まれていた場合にvxtwitterにしてリプライする
         if let Some((username, hash)) = match_url(&msg.content) {
-            // let is_embeds = &msg.embeds;
-            // println!("is_embeds: {:?}", is_embeds);
+            let is_embeds = &msg.embeds;
+            println!("is_embeds: {:?}", is_embeds);
             let reply = format!("https://vxtwitter.com/{}/status/{}\n", username, hash);
             msg.reply(&ctx.http, reply)
                 .await
