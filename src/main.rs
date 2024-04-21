@@ -21,7 +21,7 @@ impl EventHandler for Bot {
         // メッセージにtwitterのリンクが含まれていた場合にvxtwitterにしてリプライする
         if let Some((username, hash)) = match_url(&msg.content) {
             // メッセージに画像が埋め込まれていた場合はreturn
-            if msg.embeds[0].image.is_some() {
+            if !msg.embeds.is_empty() && msg.embeds[0].image.is_some() {
                 return;
             };
 
