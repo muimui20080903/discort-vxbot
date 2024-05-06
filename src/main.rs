@@ -3,7 +3,7 @@ use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
 use serenity::prelude::*;
-use shuttle_secrets::SecretStore;
+// use shuttle_secrets::SecretStore;
 // use tracing::{error, info};
 use regex::Regex;
 use tracing::info;
@@ -54,7 +54,7 @@ fn match_url(content: &str) -> Option<(String, String)> {
 
 #[shuttle_runtime::main]
 async fn serenity(
-    #[shuttle_secrets::Secrets] secret_store: SecretStore,
+    #[shuttle_runtime::Secrets] secret_store: shuttle_runtime::SecretStore,
 ) -> shuttle_serenity::ShuttleSerenity {
     // Get the discord token set in `Secrets.toml`
     let token = if let Some(token) = secret_store.get("DISCORD_TOKEN") {
