@@ -12,21 +12,28 @@ struct Bot;
 
 #[async_trait]
 impl EventHandler for Bot {
+
+    // messageが送られてきた際の処理
     async fn message(&self, ctx: Context, msg: Message) {
+
         // 発言者がBotの場合はreturn
         if msg.author.bot {
             return;
         }
 
-        // メッセージにtwitterのリンクが含まれていた場合にvxtwitterにしてリプライする
+        // メッセージにtwitterのリンクが含まれていた場合に"https://vxtwitter.com/"にしてリプライする
+        // twitterのリンクか判別し、同時にユーザー名とツイートIDも取得する
         if let Some((username, hash)) = match_url(&msg.content) {
+
             // メッセージに画像が埋め込まれていた場合はreturn
-            if !msg.embeds.is_empty() && msg.embeds[0].image.is_some() {
-                return;
-            };
+            // if !msg.embeds.is_empty() && msg.embeds[0].image.is_some() {
+            //     return;
+            // };
+
+            // リプライメッセージを作成
+            let reply = format!("https://vxtwitter.com/{}/status/{}\n", username, hash);
 
             // リプライメッセージを送信
-            let reply = format!("https://vxtwitter.com/{}/status/{}\n", username, hash);
             msg.reply(&ctx.http, reply)
                 .await
                 .expect("Error sending message");
@@ -40,6 +47,7 @@ impl EventHandler for Bot {
 
 // twitterのリンクを含むメッセージを受け取り、ユーザー名とハッシュを取り出す
 fn match_url(content: &str) -> Option<(String, String)> {
+
     // 正規表現を使ってユーザー名とハッシュを取り出す
     let regex = Regex::new(
         r"https://(x|twitter).com/(?<username>[a-zA-Z0-9_]{1,16})/status/(?<hash>[0-9]+)",
